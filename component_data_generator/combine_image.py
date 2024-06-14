@@ -35,6 +35,10 @@ def combine_image(
     width = 0
     height = 0
 
+    # Check image_path not file
+    if image_path.is_file():
+        raise NotADirectoryError(f"path: `{str(image_path)}` not folder")
+
     for filename in image_path.iterdir():
         if filename.suffix not in [".png", ".jpg", ".jpeg"]:
             continue
@@ -70,6 +74,9 @@ def combine_image(
             )
 
     if output_path:
+        output_path: Path = Path(output_path)
+        if output_path.is_dir():
+            output_path = Path(output_path, f"{image_path.stem}.png")
         combined_image.save(str(output_path))
     return combined_image
 
