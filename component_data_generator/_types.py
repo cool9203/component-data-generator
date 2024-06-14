@@ -14,7 +14,7 @@ _origin_diagram_image_filename = "diagram.png"
 
 # Image setting
 _image_size = (2000, 2000)
-_image_background_color = (255, 255, 255)
+_image_background = (255, 255, 255)
 _rectangle_width = 5
 _rectangle_color = "red"
 _line_width = 2

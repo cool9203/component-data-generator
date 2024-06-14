@@ -7,7 +7,7 @@ from component_data_generator._types import (
     _component_data_dir_name,
     _component_name_merge,
     _count,
-    _image_background_color,
+    _image_background,
     _image_size,
     _legend_data_dir_name,
     _line_color,
@@ -55,7 +55,13 @@ def arg_parser() -> argparse.Namespace:
 
     # Image parameters
     parser.add_argument("--image_size", nargs="+", type=int, default=None, help="Generate image size")
-    parser.add_argument("--image_background_color", nargs="+", type=str, default=None, help="Generate image background color")
+    parser.add_argument(
+        "--image_background",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Generate image background, can set color or folder",
+    )
     parser.add_argument("--rectangle_width", type=int, default=None, help="Generate image draw rectangle width")
     parser.add_argument("--rectangle_color", nargs="+", type=str, default=None, help="Generate image draw rectangle color")
     parser.add_argument("--line_width", type=int, default=None, help="Generate image draw line width")
@@ -99,7 +105,7 @@ if __name__ == "__main__":
         "origin_legend_image_filename": _origin_legend_image_filename,
         # Image setting
         "image_size": _image_size,
-        "image_background_color": _image_background_color,
+        "image_background": _image_background,
         "rectangle_width": _rectangle_width,
         "rectangle_color": _rectangle_color,
         "line_width": _line_width,
@@ -130,7 +136,7 @@ if __name__ == "__main__":
 
         # Check color value
         if _key in [
-            "image_background_color",
+            "image_background",
             "rectangle_color",
             "line_color",
         ]:

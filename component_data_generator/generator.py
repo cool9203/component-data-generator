@@ -21,7 +21,7 @@ from ._types import (
     ImageType,
     _component_augmentation,
     _component_data_dir_name,
-    _image_background_color,
+    _image_background,
     _image_size,
     _legend_data_dir_name,
     _line_color,
@@ -107,6 +107,21 @@ def load_component_data(
     return components
 
 
+def load_image_data(path: Path) -> List[ImageType]:
+    images = list()
+    if isinstance(path, (str, Path)):
+        path = Path(path)
+        if path.exists():
+            if path.is_dir():
+                for filename in path.iterdir():
+                    images.append(Image.open(str(filename)))
+            else:
+                images.append(Image.open(str(path)))
+        else:
+            raise FileNotFoundError(f"image_background: `{path}` not exists")
+    return images
+
+
 def _check_overlap(
     a: Tuple[int, int, int, int],
     b: Tuple[int, int, int, int],
@@ -131,7 +146,7 @@ def generate(
     origin_data_dir_name: str = _origin_data_dir_name,
     origin_legend_image_filename: str = _origin_legend_image_filename,
     image_size: Tuple[int, int] = _image_size,
-    image_background_color: Tuple[int, int, int] = _image_background_color,
+    image_background: Union[str, Tuple[int, int, int]] = _image_background,
     line_color: Tuple[int, int, int] = _line_color,
     line_width: float = _line_width,
     rectangle_color: Tuple[int, int, int] = _rectangle_color,
@@ -147,11 +162,24 @@ def generate(
     rectangle_use_max: bool = _rectangle_use_max,
     components: ComponentData = None,
     legend_image: ImageType = None,
+    background_images: List[ImageType] = None,
     **kwds,
 ) -> Tuple[ImageType, Dict[str, Any]]:
     start_time = time.time()
 
-    base_image = Image.new(mode="RGB", size=image_size, color=image_background_color)
+    # Try Load background_images
+    if not background_images:
+        background_images = load_image_data(image_background)
+
+    # Get base_image
+    if background_images:
+        random_background_image_index = rng.randint(0, len(background_images) - 1)
+        base_image = copy.deepcopy(background_images[random_background_image_index])
+        if base_image.size != image_size:
+            base_image = base_image.resize(size=image_size)
+    else:
+        base_image = Image.new(mode="RGB", size=image_size, color=image_background)
+
     boundary_x = image_size[0]
     boundary_y = image_size[1]
 
@@ -351,19 +379,11 @@ def generate(
 
 
 def run_generate(
-    components,
-    legend_image,
     output_path,
-    root_path,
     **kwds,
 ) -> bool:
     try:
-        (image, config) = generate(
-            root_path=root_path,
-            components=components,
-            legend_image=legend_image,
-            **kwds,
-        )
+        (image, config) = generate(**kwds)
         filename = str(uuid4())
         image.save(Path(output_path, f"{filename}.png"))
         image.close()
@@ -387,6 +407,10 @@ def main(**kwds: Dict[str, Any]) -> None:
     if kwds["probability_seed"] != _probability_seed:
         probability.seed(kwds["probability_seed"])
 
+    # Load background
+    background_images = load_image_data(kwds["image_background"])
+
+    # Load components
     components = load_component_data(
         root_path=Path(kwds["root_path"]).absolute(),
         component_data_dir_name=kwds["component_data_dir_name"],
@@ -405,6 +429,7 @@ def main(**kwds: Dict[str, Any]) -> None:
                 result = run_generate(
                     components=components,
                     legend_image=legend_image,
+                    background_images=background_images,
                     output_path=output_path,
                     **kwds,
                 )
@@ -417,6 +442,7 @@ def main(**kwds: Dict[str, Any]) -> None:
             result = run_generate(
                 components=components,
                 legend_image=legend_image,
+                background_images=background_images,
                 output_path=output_path,
                 **kwds,
             )
@@ -436,7 +462,7 @@ if __name__ == "__main__":
             "origin_legend_image_filename": _origin_legend_image_filename,
             # Image setting
             "image_size": _image_size,
-            "image_background_color": _image_background_color,
+            "image_background": _image_background,
             "rectangle_width": _rectangle_width,
             "rectangle_color": _rectangle_color,
             "line_width": _line_width,

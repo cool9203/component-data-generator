@@ -15,6 +15,7 @@
       - [生成沒有框線的版本](#生成沒有框線的版本)
       - [會貼 legend image 與 傾向使用重複的元件](#會貼-legend-image-與-傾向使用重複的元件)
       - [使用整張底圖 + 影像增強 + 沒有框線 + 底圖大小為640\*640](#使用整張底圖--影像增強--沒有框線--底圖大小為640640)
+      - [使用整張底圖 + 影像增強 + 沒有框線 + 底圖大小為640\*640 + 自己設定底圖](#使用整張底圖--影像增強--沒有框線--底圖大小為640640--自己設定底圖)
   - [重複跑的 ubuntu 指令](#重複跑的-ubuntu-指令)
   - [prompt data](#prompt-data)
   - [test data](#test-data)
@@ -39,12 +40,34 @@
 
 #### 會貼 legend image 與 傾向使用重複的元件
 
-`python -m component_data_generator --paste_legend_image --tend_to_repeat_component`
+```bash
+python -m component_data_generator \
+--paste_legend_image \
+--tend_to_repeat_component
+```
 
 #### 使用整張底圖 + 影像增強 + 沒有框線 + 底圖大小為640*640
 
-`python -m component_data_generator --rectangle_width 0 --rectangle_use_max --component_augmentation --image_size 640 640 -c 10000`
+```bash
+python -m component_data_generator \
+--rectangle_use_max \
+--component_augmentation \
+--rectangle_width 0 \
+--image_size 640 640 \
+-c 10000
+```
 
+#### 使用整張底圖 + 影像增強 + 沒有框線 + 底圖大小為640*640 + 自己設定底圖
+
+```bash
+python -m component_data_generator \
+--rectangle_use_max \
+--component_augmentation \
+--rectangle_width 0 \
+--image_size 640 640 \
+--image_background ./data/background \
+-c 10000
+```
 
 ## 重複跑的 ubuntu 指令
 
