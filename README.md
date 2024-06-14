@@ -1,6 +1,19 @@
 # component-data-generator
 
-[TOC]
+- [component-data-generator](#component-data-generator)
+  - [目的](#目的)
+  - [如何使用](#如何使用)
+    - [component data](#component-data)
+      - [一般啟動](#一般啟動)
+      - [生成沒有框線的版本](#生成沒有框線的版本)
+      - [會貼 legend image 與 傾向使用重複的元件](#會貼-legend-image-與-傾向使用重複的元件)
+      - [使用整張底圖 + 影像增強 + 沒有框線 + 底圖大小為640\*640](#使用整張底圖--影像增強--沒有框線--底圖大小為640640)
+  - [重複跑的 ubuntu 指令](#重複跑的-ubuntu-指令)
+  - [prompt data](#prompt-data)
+  - [test data](#test-data)
+  - [pdf to image](#pdf-to-image)
+  - [cut image](#cut-image)
+  - [combine image](#combine-image)
 
 ## 目的
 
