@@ -86,4 +86,4 @@ Reference: <https://askubuntu.com/a/523279>
 
 ## combine image
 
-`pass`
+`python component_data_generator/combine_image.py -i <YOUR_IMAGE_FOLDER> -o <OUTPUT_FILENAME>`
