@@ -1,5 +1,12 @@
 # component-data-generator
 
+## 目的
+
+自動產生電路圖與圖例的結合, 便於 VLM 利用 VQA 自動計算電路圖上的元件數量
+
+<details>
+    <summary>Table of Content</summary>
+
 - [component-data-generator](#component-data-generator)
   - [目的](#目的)
   - [如何使用](#如何使用)
@@ -14,10 +21,7 @@
   - [pdf to image](#pdf-to-image)
   - [cut image](#cut-image)
   - [combine image](#combine-image)
-
-## 目的
-
-自動產生電路圖與圖例的結合, 便於 VLM 利用 VQA 自動計算電路圖上的元件數量
+</details>
 
 ## 如何使用
 
