@@ -1,0 +1,7 @@
+pre-commit
+tqdm>=4.66.4
+pillow>=10.3.0
+matplotlib>=3.8.4
+tomli==2.0.1; python_version < '3.11'
+imgaug>=0.4.0
+pdf2image>=1.17.0
