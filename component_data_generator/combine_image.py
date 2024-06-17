@@ -18,8 +18,8 @@ def arg_parser() -> argparse.Namespace:
     """
 
     parser = argparse.ArgumentParser(description="Combine image")
-    parser.add_argument("-i", "--image_path", help="Input folder path")
-    parser.add_argument("-o", "--output_path", help="Output filepath")
+    parser.add_argument("-i", "--image_path", type=str, required=True, help="Input folder path")
+    parser.add_argument("-o", "--output_path", type=str, required=True, help="Output filepath")
 
     args = parser.parse_args()
 
@@ -28,7 +28,7 @@ def arg_parser() -> argparse.Namespace:
 
 def combine_image(
     image_path: str,
-    output_path: str = None,
+    output_path: str,
 ) -> Image.Image:
     image_path: Path = Path(image_path)
     images: Dict[Dict[Image.Image]] = dict()
@@ -75,6 +75,8 @@ def combine_image(
 
     if output_path:
         output_path: Path = Path(output_path)
+        if not output_path.exists() and not output_path.suffixes:
+            output_path.mkdir()
         if output_path.is_dir():
             output_path = Path(output_path, f"{image_path.stem}.png")
         combined_image.save(str(output_path))
