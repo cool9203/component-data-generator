@@ -94,14 +94,24 @@ def load_component_data(
     components = list()
     for filename in (root_path / component_data_dir_name).iterdir():
         processed_filename = filename.name
+        non_rotate = False
+
+        for suffix in filename.suffixes:
+            if suffix.lower() in [".nr", ".nonrotate"]:
+                non_rotate = True
+                processed_filename = processed_filename.replace(suffix, "")
+
         if component_name_merge:
             for suffix in filename.suffixes:
+                if suffix.lower() in [".nr", ".nonrotate"]:
+                    non_rotate = True
                 processed_filename = processed_filename.replace(suffix, "")
         processed_filename = processed_filename.replace("_", " ").replace("-", " ")
         components.append(
             {
                 "image": Image.open(str(filename)),
                 "name": processed_filename,
+                "non-rotate": non_rotate,
             }
         )
     return components
@@ -266,7 +276,8 @@ def generate(
             )
         )
         # Rotate component
-        processed_component = processed_component.rotate(angles[rng.randint(0, len(angles) - 1)], expand=True)
+        if not select_component.get("non-rotate", False):
+            processed_component = processed_component.rotate(angles[rng.randint(0, len(angles) - 1)], expand=True)
 
         position = (x, y, x + processed_component.width, y + processed_component.height)
         if position[2] > rectangle_area[1][0] or position[3] > rectangle_area[1][1]:
