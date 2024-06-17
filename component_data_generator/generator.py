@@ -61,6 +61,13 @@ np.bool = np.bool_
 
 ComponentData = List[Dict[str, Union[str, ImageType]]]
 
+_image_suffixes = [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".bmp",
+]
+
 # augmentation_seq = iaa.SomeOf(
 #     1,
 #     [
@@ -97,14 +104,15 @@ def load_component_data(
         non_rotate = False
 
         for suffix in filename.suffixes:
+            if suffix.lower() in _image_suffixes:
+                processed_filename = processed_filename.replace(suffix, "")
+
             if suffix.lower() in [".nr", ".nonrotate"]:
                 non_rotate = True
                 processed_filename = processed_filename.replace(suffix, "")
 
         if component_name_merge:
             for suffix in filename.suffixes:
-                if suffix.lower() in [".nr", ".nonrotate"]:
-                    non_rotate = True
                 processed_filename = processed_filename.replace(suffix, "")
         processed_filename = processed_filename.replace("_", " ").replace("-", " ")
         components.append(
