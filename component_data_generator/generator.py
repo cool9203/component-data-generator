@@ -100,6 +100,9 @@ def load_component_data(
 ) -> ComponentData:
     components = list()
     for filename in (root_path / component_data_dir_name).iterdir():
+        if filename.suffix.lower() not in [".jpg", ".jpeg", ".png"]:
+            continue
+
         processed_filename = filename.name
         non_rotate = False
 
@@ -358,17 +361,18 @@ def generate(
         logger.debug(f"lt_x: {position[0]}, lt_y: {position[1]}")
         logger.debug(f"rb_x: {position[2]}, rb_y: {position[3]}")
         used_line_position.append(position)
-        draw_params.insert(
-            0,
-            {
-                "function": base_image_draw.line,
-                "params": {
-                    "xy": position,
-                    "fill": line_color,
-                    "width": line_width,
+        if line_width:
+            draw_params.insert(
+                0,
+                {
+                    "function": base_image_draw.line,
+                    "params": {
+                        "xy": position,
+                        "fill": line_color,
+                        "width": line_width,
+                    },
                 },
-            },
-        )
+            )
         iteration_count = 0
         logger.debug("-" * 30)
 
@@ -411,7 +415,8 @@ def run_generate(
             json.dump(config, f, indent=4)
 
         return True
-    except Exception:
+    except Exception as e:
+        logger.exception(e)
         return False
 
 

@@ -29,7 +29,6 @@ from component_data_generator._types import (
     _seed,
     _tend_to_repeat_component,
 )
-from component_data_generator.generator import main
 
 
 def arg_parser() -> argparse.Namespace:
@@ -94,6 +93,8 @@ def arg_parser() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    from component_data_generator.generator import main
+
     args = arg_parser()
 
     default_args = {
